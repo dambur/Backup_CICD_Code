@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: pilot-ing
+  annotations:    
+    kubernetes.io/ingress.class: kong
+    konghq.com/strip-path: "true"
+    configuration.konghq.com/v1: "https-config"
+    konghq.com/plugins: req-term01,exit-trans01    
+spec:
+  rules:
+  - host: pilot-{{ .Values.env }}.lyve.seagate.com
+    http:
+      paths:
+      - path: /{{ .Values.var.customer_id }}
+        backend:
+          serviceName: svc-portal-client
+          servicePort: 8080
+
